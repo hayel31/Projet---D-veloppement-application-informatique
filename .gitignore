@@ -1,2 +1,3 @@
 fichiers/
 .venv
+__pycache__
