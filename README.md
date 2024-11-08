@@ -3,6 +3,14 @@
 
 Ce projet est une API backend pour la gestion des données de la fromagerie DigiCheese, développée avec FastAPI et SQLAlchemy pour interagir avec une base de données MySQL.
 
+## Membres 
+
+- Sofyan 
+- Lucas 
+- Youssef
+- Christ 
+- Hayel
+
 ## Prérequis
 
 Assurez-vous que les éléments suivants sont installés sur votre machine :
