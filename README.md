@@ -3,14 +3,6 @@
 
 Ce projet est une API backend pour la gestion des données de la fromagerie DigiCheese, développée avec FastAPI et SQLAlchemy pour interagir avec une base de données MySQL.
 
-## Membres 
-
-- Sofyan 
-- Lucas 
-- Youssef
-- Christ 
-- Hayel
-
 ## Prérequis
 
 Assurez-vous que les éléments suivants sont installés sur votre machine :
@@ -38,7 +30,7 @@ python -m venv .venv
 ```
 
 Activez l’environnement virtuel :
-- **Sur Windows** : `.\.venv\Scriptsctivate`
+- **Sur Windows** : `.\.venv\Script\activate`
 - **Sur macOS/Linux** : `source .venv/bin/activate`
 
 ### 3. Installer les Dépendances
@@ -78,36 +70,70 @@ Remplacez `<votre_utilisateur_mysql>` et `<votre_mot_de_passe_mysql>` par vos pr
 Exécutez le script de base de données pour créer toutes les tables nécessaires dans `digicheese_db` :
 
 ```bash
-python database.py
+python src/database.py
 ```
 
 Vous devriez voir le message "Tables créées avec succès."
 
-### 7. Lancer le Serveur
+### 7. Structure du Projet
+
+Votre projet devrait avoir l’architecture de dossier suivante :
+```
+projet_digicheese/
+├── src/
+│   ├── main.py              # Point d'entrée principal de l'application FastAPI
+│   ├── database.py          # Configuration de la base de données
+│   ├── models.py            # Modèles SQLAlchemy pour les tables
+│   ├── routes/              # Dossier pour les fichiers de routes
+│   │   ├── __init__.py      # Fichier pour marquer le dossier routes comme un package Python
+│   │   ├── clients.py       # Fichier de route pour gérer les clients
+│   │   └── commandes.py     # Fichier de route pour gérer les commandes
+├── .env                     # Variables d'environnement pour la base de données
+├── requirements.txt         # Liste des dépendances Python
+└── README.md                # Documentation du projet
+```
+
+### 8. Lancer le Serveur
 
 Démarrez le serveur FastAPI avec Uvicorn :
 
 ```bash
-uvicorn app:app --reload
+uvicorn src.main:app --reload
 ```
 
 Le serveur devrait maintenant tourner sur [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
-### 8. Tester l’API
+## Étapes de Test des Modifications
 
-Vous pouvez accéder à la documentation interactive de l'API avec Swagger à l'adresse suivante : [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
+Avant de créer des tests automatisés, vous pouvez tester les modifications manuellement en utilisant Swagger ou Postman.
 
----
+### 1. Démarrer le Serveur FastAPI
 
-## Structure du Projet
+Lancez le serveur avec Uvicorn pour tester l'API localement.
 
-- **app.py** : Fichier principal contenant les endpoints de l'API.
-- **database.py** : Fichier de configuration de la base de données.
-- **models.py** : Définitions des modèles SQLAlchemy pour les tables.
-- **.env** : Variables d'environnement pour la configuration de la base de données (ne pas oublier de le créer).
-- **requirements.txt** : Liste des dépendances Python.
+```bash
+uvicorn src.main:app --reload
+```
 
-## Conventions de Développement
+Le serveur sera accessible à l’adresse `http://127.0.0.1:8000`.
 
-- Utilisez des branches individuelles pour chaque développeur (`git checkout -b <nom_de_branche>`) et effectuez un `pull request` pour la revue du code avant fusion dans la branche principale.
-- Mettez à jour régulièrement les dépendances dans `requirements.txt` si de nouvelles bibliothèques sont ajoutées.
+### 2. Tester les Endpoints avec Swagger
+
+FastAPI fournit une documentation interactive pour faciliter les tests.
+
+1. Ouvrez un navigateur et allez à [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs).
+2. Vous verrez tous les endpoints de l'API avec des options pour les tester.
+3. Cliquez sur chaque endpoint et utilisez l'option "Try it out" pour tester :
+   - **GET /clients** : Récupère la liste des clients pour vérifier que la lecture fonctionne.
+   - **POST /clients** : Ajoute un client en renseignant les champs requis et en cliquant sur "Execute".
+   - **PUT /clients/{client_id}** : Met à jour un client existant en indiquant un `client_id` valide.
+   - **DELETE /clients/{client_id}** : Supprime un client existant avec un `client_id` valide. Utilisez un `client_id` inexistant pour vérifier que l'erreur 404 est renvoyée.
+
+### 3. Vérifier les Résultats
+
+Vérifiez que les actions de création, mise à jour, et suppression fonctionnent comme prévu. Assurez-vous que :
+- Les clients sont correctement ajoutés, mis à jour ou supprimés.
+- Les erreurs 404 sont renvoyées lorsque vous tentez d'accéder à un client inexistant.
+
+Une fois ces étapes manuelles validées, vous pouvez passer à la création de tests automatisés pour garantir la qualité continue du code.
+
