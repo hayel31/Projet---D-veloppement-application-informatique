@@ -51,6 +51,10 @@ DB_PASSWORD=<votre_mot_de_passe_mysql>
 DB_HOST=localhost
 DB_PORT=3306
 DB_NAME=digicheese_db
+
+--> Si vous utilisez PhpMyAdmin : 
+Il faut laisser le password vide
+Le USER de base est root
 ```
 
 Remplacez `<votre_utilisateur_mysql>` et `<votre_mot_de_passe_mysql>` par vos propres informations.
