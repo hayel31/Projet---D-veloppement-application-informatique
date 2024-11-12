@@ -1,5 +1,10 @@
-Flask
-Flask-SQLAlchemy
-mysql-connector-python
-python-dotenv
+fastapi                # Framework pour construire l'API
+uvicorn                # Serveur ASGI pour exécuter FastAPI
+sqlalchemy             # ORM pour interagir avec la base de données
+mysql-connector-python # Connecteur pour MySQL
+pydantic               # Validation des données pour les modèles FastAPI
+python-dotenv          # Chargement des variables d'environnement depuis un fichier .env
+fastapi
+sqlalchemy
 pytest
+pytest httpx
