@@ -1,23 +1,11 @@
+# src/routes/clients.py
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from src.database import get_db
 from src.controllers.client_controller import create_client, get_all_clients, get_client_by_id, update_client, delete_client
-from pydantic import BaseModel
+from src.schemas.client_schema import ClientCreate, ClientUpdate  # Import des schémas
 
 router = APIRouter()
-
-class ClientCreate(BaseModel):
-    genrecli: str
-    nomcli: str
-    prenomcli: str
-    adresse1cli: str = None
-    adresse2cli: str = None
-    adresse3cli: str = None
-    villecli_id: int = None
-    telcli: str = None
-    emailcli: str = None
-    portcli: str = None
-    newsletter: int = 0
 
 @router.get("/clients", response_model=list[ClientCreate], summary="Retrieve all clients", description="Returns a list of all clients in the database.")
 def get_clients(db: Session = Depends(get_db)):
@@ -35,7 +23,7 @@ def get_client(client_id: int, db: Session = Depends(get_db)):
     return client
 
 @router.put("/clients/{client_id}", response_model=ClientCreate, summary="Update a client", description="Updates an existing client identified by its ID and returns the updated client object.")
-def update_client_details(client_id: int, client: ClientCreate, db: Session = Depends(get_db)):
+def update_client_details(client_id: int, client: ClientUpdate, db: Session = Depends(get_db)):  # Utiliser ClientUpdate
     return update_client(db, client_id, client)
 
 @router.delete("/clients/{client_id}", summary="Delete a client", description="Deletes a client identified by its ID and returns a success message.")
