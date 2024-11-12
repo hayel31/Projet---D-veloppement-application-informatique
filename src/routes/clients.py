@@ -22,7 +22,7 @@ class ClientCreate(BaseModel):
 @router.get("/clients")
 def get_clients(db: Session = Depends(get_db)):
     clients = db.query(Client).all()
-    return [{"codcli": c.codcli, "nomcli": c.nomcli, "prenomcli": c.prenomcli} for c in clients]
+    return clients
 
 @router.post("/clients")
 def add_client(client: ClientCreate, db: Session = Depends(get_db)):
@@ -42,7 +42,14 @@ def add_client(client: ClientCreate, db: Session = Depends(get_db)):
     db.add(new_client)
     db.commit()
     db.refresh(new_client)
-    return {"message": "Client ajouté avec succès", "client_id": new_client.codcli}
+    return new_client
+
+@router.get("/clients/{client_id}")
+def get_client(client_id: int, db: Session = Depends(get_db)):
+    client = db.query(Client).filter(Client.codcli == client_id).first()
+    if not client:
+        raise HTTPException(status_code=404, detail="Client not found")
+    return client
 
 @router.put("/clients/{client_id}")
 def update_client(client_id: int, client: ClientCreate, db: Session = Depends(get_db)):
@@ -53,13 +60,13 @@ def update_client(client_id: int, client: ClientCreate, db: Session = Depends(ge
         setattr(existing_client, key, value)
     db.commit()
     db.refresh(existing_client)
-    return {"message": "Client mis à jour avec succès", "client": existing_client}
+    return existing_client
 
 @router.delete("/clients/{client_id}")
 def delete_client(client_id: int, db: Session = Depends(get_db)):
-    existing_client = db.query(Client).filter(Client.codcli == client_id).first()
-    if not existing_client:
+    client = db.query(Client).filter(Client.codcli == client_id).first()
+    if not client:
         raise HTTPException(status_code=404, detail="Client not found")
-    db.delete(existing_client)
+    db.delete(client)
     db.commit()
     return {"message": "Client supprimé avec succès"}
