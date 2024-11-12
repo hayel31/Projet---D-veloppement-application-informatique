@@ -1,0 +1,16 @@
+from fastapi import FastAPI, Request
+from fastapi.templating import Jinja2Templates
+from sqlalchemy.orm import Session
+from database import get_db
+from controllers.client_controller import get_all_clients  # Supposons que vous avez ce contrôleur pour gérer les clients
+
+app = FastAPI()
+
+# Créer un objet templates
+templates = Jinja2Templates(directory="templates")
+
+# Définir une route pour afficher la page de clients
+@app.get("/clients")
+def show_clients(request: Request, db: Session = Depends(get_db)):
+    clients = get_all_clients(db)  # Obtenir la liste des clients depuis la base de données
+    return templates.TemplateResponse("clients.html", {"request": request, "clients": clients})

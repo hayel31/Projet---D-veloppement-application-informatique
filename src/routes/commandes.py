@@ -1,31 +1,30 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from database import get_db
-from models import Commande
-from pydantic import BaseModel
+from src.database import get_db
+from src.controllers.commande_controller import (
+    get_all_commandes, create_commande, get_commande_by_id,
+    update_commande, delete_commande
+)
+from src.schemas.commande_schema import CommandeCreate
 
 router = APIRouter()
 
-class CommandeCreate(BaseModel):
-    codcli: int
-    datcde: str
-    nbcolis: int = 1
-    cdeComt: str = None
-
 @router.get("/commandes")
 def get_commandes(db: Session = Depends(get_db)):
-    commandes = db.query(Commande).all()
-    return [{"codcde": c.codcde, "codcli": c.codcli, "datcde": c.datcde} for c in commandes]
+    return get_all_commandes(db)
 
 @router.post("/commandes")
 def add_commande(commande: CommandeCreate, db: Session = Depends(get_db)):
-    new_commande = Commande(
-        codcli=commande.codcli,
-        datcde=commande.datcde,
-        nbcolis=commande.nbcolis,
-        cdeComt=commande.cdeComt
-    )
-    db.add(new_commande)
-    db.commit()
-    db.refresh(new_commande)
-    return {"message": "Commande ajoutée avec succès", "commande_id": new_commande.codcde}
+    return create_commande(db, commande)
+
+@router.get("/commandes/{commande_id}")
+def get_commande(commande_id: int, db: Session = Depends(get_db)):
+    return get_commande_by_id(db, commande_id)
+
+@router.put("/commandes/{commande_id}")
+def update_commande_details(commande_id: int, commande: CommandeCreate, db: Session = Depends(get_db)):
+    return update_commande(db, commande_id, commande)
+
+@router.delete("/commandes/{commande_id}")
+def remove_commande(commande_id: int, db: Session = Depends(get_db)):
+    return delete_commande(db, commande_id)
