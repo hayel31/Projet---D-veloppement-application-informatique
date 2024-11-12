@@ -16,7 +16,7 @@ SQLALCHEMY_DATABASE_URL = (
 )
 
 # Configuration de l'engine pour SQLAlchemy avec la base de données
-engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"collation": "utf8mb4_general_ci"})
+engine = create_engine(SQLALCHEMY_DATABASE_URL, connect_args={"collation": "utf8mb3_general_ci"})
 
 # Déclaration de la base pour créer des modèles et faire le mapping
 Base = declarative_base()

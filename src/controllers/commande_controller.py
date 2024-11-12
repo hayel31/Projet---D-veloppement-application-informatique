@@ -1,14 +1,7 @@
-# src/controllers/commande_controller.py
 from sqlalchemy.orm import Session
 from src.models import Commande
 from fastapi import HTTPException
-from pydantic import BaseModel
-
-class CommandeCreate(BaseModel):
-    codcli: int
-    datcde: str
-    nbcolis: int = 1
-    cdeComt: str = None
+from src.schemas.commande_schema import CommandeCreate
 
 def get_all_commandes(db: Session):
     return db.query(Commande).all()
