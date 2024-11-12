@@ -1,0 +1,14 @@
+{
+    "movies": [
+        {
+            "titre": "Test : Le Film",
+            "date_de_sortie": "09/11/2024",
+            "description": "Absolument incroyable ET magnifique"
+        },
+        {
+            "titre": "Test2",
+            "date_de_sortie": "10/09/2024",
+            "description": "Encore + mieux"
+        }
+    ]
+}
