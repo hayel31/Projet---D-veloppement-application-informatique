@@ -5,15 +5,9 @@ from src.controllers.commande_controller import (
     get_all_commandes, create_commande, get_commande_by_id,
     update_commande, delete_commande
 )
-from pydantic import BaseModel
+from src.schemas.commande_schema import CommandeCreate
 
 router = APIRouter()
-
-class CommandeCreate(BaseModel):
-    codcli: int
-    datcde: str
-    nbcolis: int = 1
-    cdeComt: str = None
 
 @router.get("/commandes")
 def get_commandes(db: Session = Depends(get_db)):
