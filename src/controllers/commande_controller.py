@@ -1,41 +1,44 @@
-# src/routes/clients.py
-from fastapi import APIRouter, Depends
+# src/controllers/commande_controller.py
 from sqlalchemy.orm import Session
-from src.database import get_db
+from src.models import Commande
+from fastapi import HTTPException
 from pydantic import BaseModel
-from controllers import client_controller
 
-router = APIRouter()
+class CommandeCreate(BaseModel):
+    codcli: int
+    datcde: str
+    nbcolis: int = 1
+    cdeComt: str = None
 
-class ClientCreate(BaseModel):
-    genrecli: str
-    nomcli: str
-    prenomcli: str
-    adresse1cli: str = None
-    adresse2cli: str = None
-    adresse3cli: str = None
-    villecli_id: int = None
-    telcli: str = None
-    emailcli: str = None
-    portcli: str = None
-    newsletter: int = 0
+def get_all_commandes(db: Session):
+    return db.query(Commande).all()
 
-@router.get("/clients")
-def get_clients(db: Session = Depends(get_db)):
-    return client_controller.get_all_clients(db)
+def create_commande(db: Session, commande_data: CommandeCreate):
+    new_commande = Commande(**commande_data.dict())
+    db.add(new_commande)
+    db.commit()
+    db.refresh(new_commande)
+    return new_commande
 
-@router.post("/clients")
-def add_client(client: ClientCreate, db: Session = Depends(get_db)):
-    return client_controller.create_client(db, client)
+def get_commande_by_id(db: Session, commande_id: int):
+    commande = db.query(Commande).filter(Commande.codcde == commande_id).first()
+    if not commande:
+        raise HTTPException(status_code=404, detail="Commande not found")
+    return commande
 
-@router.get("/clients/{client_id}")
-def get_client(client_id: int, db: Session = Depends(get_db)):
-    return client_controller.get_client_by_id(db, client_id)
+def update_commande(db: Session, commande_id: int, commande_data: CommandeCreate):
+    commande = db.query(Commande).filter(Commande.codcde == commande_id).first()
+    if not commande:
+        raise HTTPException(status_code=404, detail="Commande not found")
+    for key, value in commande_data.dict().items():
+        setattr(commande, key, value)
+    db.commit()
+    return commande
 
-@router.put("/clients/{client_id}")
-def update_client(client_id: int, client: ClientCreate, db: Session = Depends(get_db)):
-    return client_controller.update_client(db, client_id, client)
-
-@router.delete("/clients/{client_id}")
-def delete_client(client_id: int, db: Session = Depends(get_db)):
-    return client_controller.delete_client(db, client_id)
+def delete_commande(db: Session, commande_id: int):
+    commande = db.query(Commande).filter(Commande.codcde == commande_id).first()
+    if not commande:
+        raise HTTPException(status_code=404, detail="Commande not found")
+    db.delete(commande)
+    db.commit()
+    return {"message": "Commande supprimée avec succès"}
