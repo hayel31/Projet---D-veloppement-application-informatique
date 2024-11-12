@@ -1,7 +1,7 @@
 # src/routes/clients.py
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from database import get_db
+from src.database import get_db
 from pydantic import BaseModel
 from controllers import client_controller
 
