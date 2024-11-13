@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from src.routes import clients, commandes, objets, details  # Utiliser des imports absolus
-from src.database import engine, Base  # Importer engine et Base de database.py
-
+from .routes import clients, commandes, objets, details  # Utiliser des imports relatifs
+from src.database import engine, Base  # Importez engine et Base de database.py
+from src.models import Client, Commande,  Objet, Detail
 # Initialiser l'application FastAPI
 app = FastAPI()
 
