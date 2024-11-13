@@ -1,50 +1,47 @@
-# from fastapi.testclient import TestClient
-# from sqlalchemy import create_engine
-# from sqlalchemy.orm import sessionmaker
-# from src.main import app  # Assure-toi que le chemin d'importation est correct
-# from src.database import Base, get_db
+import sys
+import os
+import unittest
+from fastapi.testclient import TestClient
 
-# SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"  # Utilise une base de données de test
+# Ajouter 'src' au chemin d'importation pour que Python puisse trouver main.py
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'src')))
 
-# engine = create_engine(
-#     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
-# )
-# TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+# Maintenant tu peux importer l'application FastAPI depuis main
+from main import app
 
-# Base.metadata.create_all(bind=engine)
+class TestClientRoutes(unittest.TestCase):
+    def setUp(self):
+        # Récupère un client de test
+        self.client = TestClient(app)
+    
+    def test_get_all_clients_empty(self):
+        # Test pour la route GET /clients quand la base de données est vide
+        response = self.client.get("/clients")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json(), [])  # On attend une liste vide si aucun client n'est créé
 
-# def override_get_db():
-#     db = TestingSessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
+    def test_create_client(self):
+        # Test de la création d'un client
+        response = self.client.post(
+            "/clients",
+            json={"emailcli": "test@domain.com", "nomcli": "John", "prenomcli": "Doe", "adressecli": "123 Rue", "telephonecli": "1234567890"}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertIn("emailcli", response.json())
+        self.assertEqual(response.json()["emailcli"], "test@domain.com")
+        
+    def test_get_all_clients_with_data(self):
+        # Ajout d'un client pour tester la récupération
+        self.client.post(
+            "/clients",
+            json={"emailcli": "test2@domain.com", "nomcli": "Alice", "prenomcli": "Wonder", "adressecli": "789 Avenue", "telephonecli": "9876543210"}
+        )
+        
+        # Test de la route GET /clients après ajout d'un client
+        response = self.client.get("/clients")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()), 1)  # On s'attend à un seul client dans la réponse
+        self.assertEqual(response.json()[0]["emailcli"], "test2@domain.com")
 
-# app.dependency_overrides[get_db] = override_get_db
-
-# client = TestClient(app)
-
-# def test_get_clients():
-#     response = client.get("/clients")
-#     assert response.status_code == 200
-#     assert isinstance(response.json(), list)
-
-# def test_create_client():
-#     response = client.post("/clients", json={
-#         "genrecli": "M",
-#         "nomcli": "Doe",
-#         "prenomcli": "John",
-#         "emailcli": "john.doe@example.com"
-#     })
-#     assert response.status_code == 200
-#     data = response.json()
-#     assert data['nomcli'] == 'Doe'
-
-# def test_delete_client():
-#     # Ajoute un client
-#     response = client.post("/clients", json={"nomcli": "Doe", "prenomcli": "John", "emailcli": "delete@example.com"})
-#     client_id = response.json()['id']
-#     # Supprime le client
-#     response = client.delete(f"/clients/{client_id}")
-#     assert response.status_code == 200
-#     assert response.json() == {"message": "Client deleted successfully"}
+if __name__ == "__main__":
+    unittest.main()
