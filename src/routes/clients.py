@@ -9,6 +9,7 @@ router = APIRouter()
 
 @router.get("/clients", response_model=list[ClientCreate], summary="Retrieve all clients", description="Returns a list of all clients in the database.")
 def get_clients(db: Session = Depends(get_db)):
+    
     return get_all_clients(db)
 
 @router.post("/clients", response_model=ClientCreate, summary="Create a new client", description="Creates a new client in the database and returns the created client object.")
