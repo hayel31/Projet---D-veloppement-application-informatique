@@ -29,9 +29,3 @@ def get_db():
         yield db
     finally:
         db.close()
-
-# Créer les tables dans la base de données
-if __name__ == "__main__":
-    from models import *  # Importer tous les modèles
-    Base.metadata.create_all(bind=engine)  # Créer les tables dans la base de données
-    print("Tables créées avec succès.")

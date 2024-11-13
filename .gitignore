@@ -1,13 +1,6 @@
 # Ignorer le dossier de l'environnement virtuel
-.venv/
-venv/
-/venv/
+.venv
 .env
-
-
 # Ignorer les fichiers de cache Python
-__pycache__/
+__pycache__
 *.pyc
-*.pyo
-**/__pycache__/
-**/*.pyc

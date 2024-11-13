@@ -7,3 +7,4 @@ python-dotenv          # Chargement des variables d'environnement depuis un fich
 fastapi
 sqlalchemy
 pytest
+httpx
