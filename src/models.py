@@ -1,7 +1,7 @@
 from sqlalchemy import Column, Integer, String, Date, Boolean, ForeignKey, Index, Numeric, Float,MetaData
 from sqlalchemy.orm import relationship
 
-from src.database import Base
+from .database import Base
 
 # classe permettant de définir les modèles de la base de données pour créer ou accéder aux tables
 # hérite de la base définie dans database.py
