@@ -9,6 +9,7 @@ app = FastAPI()
 # Créer les tables dans la base de données si elles n'existent pas encore
 Base.metadata.create_all(bind=engine)
 
+
 # Inclure les routeurs secondaires
 app.include_router(clients.router)
 app.include_router(commandes.router)
