@@ -1,7 +1,9 @@
 from pydantic import BaseModel
+from datetime import date
 
 class CommandeCreate(BaseModel):
-    codcli: int
-    datcde: str
-    nbcolis: int = 1
-    cdeComt: str = None
+    codcli:  int | None = None
+    datcde:  date | None = None
+    nbcolis: int | None = None
+    cdeComt: str | None = None
+    cheqcli: int | None = None

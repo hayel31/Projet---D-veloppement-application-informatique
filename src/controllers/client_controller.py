@@ -22,6 +22,12 @@ def get_client_by_id(db: Session, client_id: int):
         raise HTTPException(status_code=404, detail="Client not found")
     return client
 
+def get_client_by_name(db: Session, client_name: str):
+    client = db.query(Client).filter(Client.nomcli == client_name).first()
+    if not client:
+        raise HTTPException(status_code=404, detail="Client not found")
+    return client
+
 def update_client(db: Session, client_id: int, client_data: ClientUpdate):
     client = db.query(Client).filter(Client.codcli == client_id).first()
     if not client:
