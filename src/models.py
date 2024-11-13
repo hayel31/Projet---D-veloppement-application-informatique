@@ -101,9 +101,9 @@ class Detail(Base):
     __tablename__ = "t_dtlcode"
 
     id = Column(Integer, primary_key=True)
-    codcde = Column(Integer, ForeignKey('t_entcde.codcde'), nullable=True, index=True)
-    qte = Column(Integer, default=1)
-    colis = Column(Integer, default=1)
+    codcde = Column(Integer, default=None)
+    qte = Column(Integer, default=None)
+    colis = Column(Integer, default=None)
     commentaire = Column(String(100), default=None)
 
 
