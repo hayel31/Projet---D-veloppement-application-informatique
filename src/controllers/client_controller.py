@@ -44,3 +44,10 @@ def delete_client(db: Session, client_id: int):
     db.delete(client)
     db.commit()
     return {"message": "Client supprimé avec succès"}
+
+
+def get_client_by_name(db: Session, client_name: str):
+    client = db.query(Client).filter(Client.nomcli == client_name).first()
+    if not client:
+        raise HTTPException(status_code=404, detail="Client not found")
+    return client
