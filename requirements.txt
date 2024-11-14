@@ -6,3 +6,4 @@ pydantic               # Validation des données pour les modèles FastAPI
 python-dotenv          # Chargement des variables d'environnement depuis un fichier .env
 pytest 
 httpx
+requests

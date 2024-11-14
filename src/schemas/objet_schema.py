@@ -14,9 +14,6 @@ class ObjetSchema(BaseModel):
     points: Optional[int] = 0
     o_ordre_aff: Optional[int] = 0
 
-    class Config:
-        orm_mode = True
-
 class ObjetCreateSchema(BaseModel):
     libobj: Optional[str] = None
     tailleobj: Optional[str] = None
@@ -28,6 +25,3 @@ class ObjetCreateSchema(BaseModel):
     o_cartp: Optional[int] = 0
     points: Optional[int] = 0
     o_ordre_aff: Optional[int] = 0
-
-    class Config:
-        orm_mode = True
